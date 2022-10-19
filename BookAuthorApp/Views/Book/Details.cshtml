@@ -1,0 +1,90 @@
+﻿@model BookAuthorApp.Models.ViewModels.BookDetailsVM
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Book Details</h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Details">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" readonly class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" readonly class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublicationYear" class="control-label"></label>
+                <input asp-for="PublicationYear" readonly class="form-control" />
+                <span asp-validation-for="PublicationYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberOfAuthors" class="control-label"></label>
+                <input asp-for="NumberOfAuthors" readonly class="form-control" />
+                <span asp-validation-for="NumberOfAuthors" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@if (Model != null)
+{
+    <h4>Authors</h4>
+    <a asp-action="Create" asp-controller="Author" asp-route-id="@Model.Id">
+        Add Author
+    </a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Name
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var author in Model.Authors)
+            {
+                <tr>
+                    <td>
+                        @author.Id
+                    </td>
+                    <td>
+                        @author.FirstName @author.LastName
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-controller="Author"
+                   asp-route-id="@Model.Id" asp-route-authorId="@author.Id">Edit</a> |
+                        <a asp-action="Delete" asp-controller="Author"
+                   asp-route-id="@Model.Id" asp-route-authorId="@author.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
