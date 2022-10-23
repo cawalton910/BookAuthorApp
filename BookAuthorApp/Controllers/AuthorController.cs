@@ -16,25 +16,28 @@ namespace BookAuthorApp.Controllers
         {
             return View();
         }
-        public IActionResult Create([Bind(Prefix = "id")]int bookId)
+        public async Task<IActionResult> CreateAsync([Bind(Prefix = "id")]int bookId)
         {
-            var model = _bookRepository.ReadAsync(bookId);
-            if (model == null)
+            var book = await _bookRepository.ReadAsync(bookId);
+            if (book == null)
             {
                 RedirectToAction("Index", "Book");
             }
-            ViewData["Book"] = model;
+            ViewData["Book"] = book;
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int bookId, CreateAuthorVM author)
         {
             if (author != null)
             {
                 var model = author.GetAuthorInstance();
                 await _bookRepository.CreateAuthorAsync(bookId, model);
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Book", new {id = bookId});
             }
+            var book = _bookRepository.ReadAsync(bookId);
+            ViewData["Book"] = book;
             return View(author);
         }
     }

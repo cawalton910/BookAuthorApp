@@ -20,12 +20,15 @@ namespace BookAuthorApp.Services
 
         public async Task<Author> CreateAuthorAsync(int bookId, Author author)
         {
-            var book = await _db.Books.FindAsync(bookId);
-            if(book != null && author != null)
+            var model = await ReadAsync(bookId);
+            if(model != null && author != null)
             {
-                book.Authors.Add(author);
-                author.Book = book;
-                _db.SaveChanges();
+                
+                model.Authors.Add(author);
+                //author.Book = book;
+                //author.BookId = bookId;
+                
+                await _db.SaveChangesAsync();
                 return author;
             }
             return new Author();
@@ -34,12 +37,21 @@ namespace BookAuthorApp.Services
 
         public async Task<ICollection<Book>> ReadAllAsync()
         {
-           return await _db.Books.ToListAsync();
+           return await _db.Books
+                .Include(a => a.Authors)
+                .ToListAsync();
         }
 
         public async Task<Book?> ReadAsync(int id)
         {
-            return await _db.Books.FindAsync(id);
+            var book = await _db.Books.FindAsync(id);
+            if (book != null)
+            {
+                _db.Entry(book)
+                    .Collection(a => a.Authors)
+                    .Load();
+            }
+            return book;
         }
     }
 }

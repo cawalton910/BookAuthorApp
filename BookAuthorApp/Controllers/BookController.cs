@@ -51,7 +51,9 @@ namespace BookAuthorApp.Controllers
             {
                 Id = book.Id,
                 Title = book.Title,
-                PublicationYear = book.PublicationYear
+                PublicationYear = book.PublicationYear,
+                NumberOfAuthors = book.Authors.Count,
+                Authors = book.Authors
             };
             return View(model);
         }
