@@ -1,0 +1,19 @@
+﻿@model BookAuthorApp.Models.ViewModels.DeleteAuthorVM
+
+@{
+    ViewData["Title"] = $"Deleting Author {Model.FirstName} {Model.LastName} from {Model.Book.Title}";
+}
+
+<h1>Deleting Author @Model.FirstName @Model.LastName from @Model.Book.Title</h1>
+
+<h3>You are about to delete @Model.FirstName @Model.LastName . Are you sure?</h3>
+<div>  
+    <form asp-action="Delete">
+        <input name="bookId" value="@Model.Book.Id" type="hidden" />
+        <input name="authorId" value="@Model.Id" type="hidden" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" asp-controller="Book">Back to List</a>
+        <a asp-action="Details" asp-controller="Book"
+           asp-route-id="@Model.Book.Id">Back to Book Details</a>
+    </form>
+</div>

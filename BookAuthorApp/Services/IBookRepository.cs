@@ -8,5 +8,7 @@ namespace BookAuthorApp.Services
         Task<Book> CreateAsync(Book book);
         Task<Book?> ReadAsync(int id);
         Task<Author> CreateAuthorAsync(int bookId, Author author);
+        Task UpdateAuthorAsync(int bookId, Author UpdatedAuthor);  
+        Task DeleteAuthorAsync(int bookId, int authorId);
     }
 }

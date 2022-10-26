@@ -22,17 +22,28 @@ namespace BookAuthorApp.Services
         {
             var model = await ReadAsync(bookId);
             if(model != null && author != null)
-            {
-                
+            {    
                 model.Authors.Add(author);
-                //author.Book = book;
-                //author.BookId = bookId;
-                
+                author.Book = model;             
                 await _db.SaveChangesAsync();
                 return author;
             }
             return new Author();
 
+        }
+
+        public async Task DeleteAuthorAsync(int bookId, int authorId)
+        {
+            var book = await ReadAsync(bookId);
+            if (book != null)
+            {
+                var authorToDelete = book.Authors.FirstOrDefault(a => a.Id == authorId);
+                if (authorToDelete != null)
+                {
+                    book.Authors.Remove(authorToDelete);
+                    await _db.SaveChangesAsync();
+                }
+            }        
         }
 
         public async Task<ICollection<Book>> ReadAllAsync()
@@ -52,6 +63,23 @@ namespace BookAuthorApp.Services
                     .Load();
             }
             return book;
+        }
+
+        public async Task UpdateAuthorAsync(int bookId, Author UpdatedAuthor)
+        {
+            var book = await ReadAsync(bookId);
+            if (book != null)
+            {
+                var authorToUpdate = book.Authors.FirstOrDefault(a => a.Id == UpdatedAuthor.Id);
+                if (authorToUpdate != null)
+                {
+                    authorToUpdate.FirstName = UpdatedAuthor.FirstName;
+                    authorToUpdate.LastName = UpdatedAuthor.LastName;
+                    await _db.SaveChangesAsync();
+                }
+            }
+            
+            
         }
     }
 }

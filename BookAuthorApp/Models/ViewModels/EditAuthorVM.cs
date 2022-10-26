@@ -1,11 +1,12 @@
 ﻿using BookAuthorApp.Models.Entities;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BookAuthorApp.Models.ViewModels
 {
-    public class CreateAuthorVM
+    public class EditAuthorVM
     {
+        public Book? Book { get; set; }
         public int Id { get; set; }
         [DisplayName("First Name")]
         public string? FirstName { get; set; }
@@ -15,11 +16,10 @@ namespace BookAuthorApp.Models.ViewModels
         {
             return new Author
             {
+                Id = this.Id,
                 FirstName = this.FirstName,
                 LastName = this.LastName,
             };
-            
         }
-
     }
 }
